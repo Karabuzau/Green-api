@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GREEN-API Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        input, button {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>GREEN-API Test Page</h1>
+    <label for="idInstance">idInstance:</label>
+    <input type="text" id="idInstance">
+    
+    <label for="apiTokenInstance">ApiTokenInstance:</label>
+    <input type="text" id="apiTokenInstance">
+    
+    <button onclick="getSettings()">getSettings</button>
+    <button onclick="getStateInstance()">getStateInstance</button>
+    <button onclick="sendMessage()">sendMessage</button>
+    <button onclick="sendFileByUrl()">sendFileByUrl</button>
+    
+    <div class="response" id="response"></div>
+
+    <script>
+        async function apiRequest(endpoint, method = 'GET', body = null) {
+            const idInstance = document.getElementById('idInstance').value;
+            const apiTokenInstance = document.getElementById('apiTokenInstance').value;
+            const url = `https://api.green-api.com/${idInstance}/${endpoint}/${apiTokenInstance}`;
+
+            const options = {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            if (body) {
+                options.body = JSON.stringify(body);
+            }
+
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+                document.getElementById('response').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('response').innerText = 'Error: ' + error;
+            }
+        }
+
+        function getSettings() {
+            apiRequest('getSettings');
+        }
+
+        function getStateInstance() {
+            apiRequest('getStateInstance');
+        }
+
+        function sendMessage() {
+            const messageBody = {
+                phone: "79001234567",
+                message: "Hello, this is a test message"
+            };
+            apiRequest('sendMessage', 'POST', messageBody);
+        }
+
+        function sendFileByUrl() {
+            const fileBody = {
+                phone: "79001234567",
+                urlFile: "https://example.com/file.pdf",
+                fileName: "testFile.pdf"
+            };
+            apiRequest('sendFileByUrl', 'POST', fileBody);
+        }
+    </script>
+</body>
+</html>
+
