@@ -13,12 +13,21 @@
             display: block;
             margin-bottom: 10px;
         }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
         .response {
             margin-top: 20px;
             padding: 10px;
             border: 1px solid #ccc;
             background-color: #f9f9f9;
             white-space: pre-wrap;
+        }
+        .large-button {
+            font-size: 18px;
+            padding: 15px 30px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -30,8 +39,15 @@
     <label for="apiTokenInstance">ApiTokenInstance:</label>
     <input type="text" id="apiTokenInstance">
     
-    <button onclick="getSettings()">getSettings</button>
-    <button onclick="getStateInstance()">getStateInstance</button>
+    <button class="large-button" onclick="getSettings()">getSettings</button>
+    <button class="large-button" onclick="getStateInstance()">getStateInstance</button>
+    
+    <label for="phoneNumber">Phone Number:</label>
+    <input type="text" id="phoneNumber">
+    
+    <label for="message">Message:</label>
+    <input type="text" id="message">
+    
     <button onclick="sendMessage()">sendMessage</button>
     <button onclick="sendFileByUrl()">sendFileByUrl</button>
     
@@ -76,16 +92,19 @@
         }
 
         function sendMessage() {
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const message = document.getElementById('message').value;
             const messageBody = {
-                chatId: "1234567890@c.us",
-                message: "Hello, this is a test message"
+                chatId: `${phoneNumber}@c.us`,
+                message: message
             };
             apiRequest('sendMessage', 'POST', messageBody);
         }
 
         function sendFileByUrl() {
+            const phoneNumber = document.getElementById('phoneNumber').value;
             const fileBody = {
-                chatId: "1234567890@c.us",
+                chatId: `${phoneNumber}@c.us`,
                 urlFile: "https://example.com/file.pdf",
                 fileName: "testFile.pdf"
             };
