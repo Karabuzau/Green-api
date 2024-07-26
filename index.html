@@ -8,6 +8,13 @@
         body {
             font-family: Arial, sans-serif;
             padding: 20px;
+            display: flex;
+            gap: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         input, button {
             display: block;
@@ -18,11 +25,12 @@
             font-size: 16px;
         }
         .response {
-            margin-top: 20px;
+            flex-grow: 1;
             padding: 10px;
             border: 1px solid #ccc;
             background-color: #f9f9f9;
             white-space: pre-wrap;
+            max-width: 50%;
         }
         .large-button {
             font-size: 18px;
@@ -32,24 +40,33 @@
     </style>
 </head>
 <body>
-    <h1>GREEN-API Test Page</h1>
-    <label for="idInstance">idInstance:</label>
-    <input type="text" id="idInstance">
-    
-    <label for="apiTokenInstance">ApiTokenInstance:</label>
-    <input type="text" id="apiTokenInstance">
-    
-    <button class="large-button" onclick="getSettings()">getSettings</button>
-    <button class="large-button" onclick="getStateInstance()">getStateInstance</button>
-    
-    <label for="phoneNumber">Phone Number:</label>
-    <input type="text" id="phoneNumber">
-    
-    <label for="message">Message:</label>
-    <input type="text" id="message">
-    
-    <button onclick="sendMessage()">sendMessage</button>
-    <button onclick="sendFileByUrl()">sendFileByUrl</button>
+    <div class="container">
+        <h1>GREEN-API Test Page</h1>
+        <label for="idInstance">idInstance:</label>
+        <input type="text" id="idInstance">
+        
+        <label for="apiTokenInstance">ApiTokenInstance:</label>
+        <input type="text" id="apiTokenInstance">
+        
+        <button class="large-button" onclick="getSettings()">getSettings</button>
+        <button class="large-button" onclick="getStateInstance()">getStateInstance</button>
+        
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="text" id="phoneNumber">
+        
+        <label for="message">Message:</label>
+        <input type="text" id="message">
+        
+        <button onclick="sendMessage()">sendMessage</button>
+        
+        <button class="large-button" onclick="sendFileByUrl()">sendFileByUrl</button>
+        
+        <label for="filePhoneNumber">Phone Number:</label>
+        <input type="text" id="filePhoneNumber">
+        
+        <label for="fileUrl">File URL:</label>
+        <input type="text" id="fileUrl">
+    </div>
     
     <div class="response" id="response"></div>
 
@@ -102,11 +119,12 @@
         }
 
         function sendFileByUrl() {
-            const phoneNumber = document.getElementById('phoneNumber').value;
+            const phoneNumber = document.getElementById('filePhoneNumber').value;
+            const fileUrl = document.getElementById('fileUrl').value;
             const fileBody = {
                 chatId: `${phoneNumber}@c.us`,
-                urlFile: "https://example.com/file.pdf",
-                fileName: "testFile.pdf"
+                urlFile: fileUrl,
+                fileName: fileUrl.split('/').pop()
             };
             apiRequest('sendFileByUrl', 'POST', fileBody);
         }
