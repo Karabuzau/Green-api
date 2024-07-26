@@ -41,7 +41,7 @@
         async function apiRequest(endpoint, method = 'GET', body = null) {
             const idInstance = document.getElementById('idInstance').value;
             const apiTokenInstance = document.getElementById('apiTokenInstance').value;
-            const url = `https://api.green-api.com/${idInstance}/${endpoint}/${apiTokenInstance}`;
+            const url = `https://api.green-api.com/waInstance${idInstance}/${endpoint}/${apiTokenInstance}`;
 
             const options = {
                 method: method,
@@ -56,10 +56,14 @@
 
             try {
                 const response = await fetch(url, options);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 const data = await response.json();
                 document.getElementById('response').innerText = JSON.stringify(data, null, 2);
             } catch (error) {
-                document.getElementById('response').innerText = 'Error: ' + error;
+                document.getElementById('response').innerText = 'Error: ' + error.message;
+                console.error('Fetch error:', error);
             }
         }
 
@@ -73,7 +77,7 @@
 
         function sendMessage() {
             const messageBody = {
-                phone: "79001234567",
+                chatId: "1234567890@c.us",
                 message: "Hello, this is a test message"
             };
             apiRequest('sendMessage', 'POST', messageBody);
@@ -81,7 +85,7 @@
 
         function sendFileByUrl() {
             const fileBody = {
-                phone: "79001234567",
+                chatId: "1234567890@c.us",
                 urlFile: "https://example.com/file.pdf",
                 fileName: "testFile.pdf"
             };
@@ -90,4 +94,3 @@
     </script>
 </body>
 </html>
-
